@@ -16,17 +16,25 @@ void RCC_Configuration(void)
   RCC_AHBPeriphClockCmd( RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB, ENABLE);
   
    /* Timer2, Timer14  Clocks enable */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2| RCC_APB1Periph_TIM14 | RCC_APB1Periph_TIM3 , ENABLE ) ;
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2 | RCC_APB1Periph_TIM14 | RCC_APB1Periph_TIM3 , ENABLE ) ;
   
   /* Enable SYSCFG clock, RS 485 to UART  */
   RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1 , ENABLE);
+  
+  /* enable APB1 peripheral clock for I2C1 */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+  
+  /* enable clock for SCL and SDA pins  */
+  //RCC_AHB1PeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);  
+  
+  
 }
 
 
 void GPIO_Config(void)
 {
   GPIO_InitTypeDef                      GPIO_InitStructure;
-  
+  I2C_InitTypeDef I2C_InitStruct;
   // LED
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
@@ -84,6 +92,34 @@ void GPIO_Config(void)
   /* Connect pin to Periph */
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_1);    
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_1);
+  
+  /* Configure pins as AF pushpull (I2C) */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;                        // we are going to use PB6 and PB7
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;		  // set pins to alternate function
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	  // set GPIO speed
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;		  // set output to open drain --> the line has to be only pulled low, not driven high
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;		  // enable pull up resistors
+  GPIO_Init(GPIOB, &GPIO_InitStructure);			          // init GPIOB
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;                        // we are going to use PB6 and PB7
+  GPIO_Init(GPIOB, &GPIO_InitStructure);			          // init GPIOB
+  // Connect I2C2 pins to AF  
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource8, GPIO_AF_1);	// SCL
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource9, GPIO_AF_1);      // SDA
+
+  I2C_Cmd(I2C1, DISABLE);
+  I2C_SoftwareResetCmd(I2C1, ENABLE);
+  I2C_SoftwareResetCmd(I2C1, DISABLE);
+        
+  // configure I2C1
+  I2C_InitStruct.I2C_Timing = 0xB0420F13; //0x10805E89;
+  I2C_InitStruct.I2C_AnalogFilter = I2C_AnalogFilter_Enable;
+  I2C_InitStruct.I2C_DigitalFilter = 0;  
+  I2C_InitStruct.I2C_Mode = I2C_Mode_I2C;
+  I2C_InitStruct.I2C_OwnAddress1 = 0xAB;
+  I2C_InitStruct.I2C_Ack = I2C_Ack_Enable;
+  I2C_InitStruct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+  I2C_Init(I2C1, &I2C_InitStruct);
+  I2C_Cmd(I2C1, ENABLE);
 }
 
 //////////////////////////////////// TIMMER//////////////////////////////////////////////////
