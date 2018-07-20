@@ -58,7 +58,7 @@ void WatchDog_Reset(void);
 void WatchDogTask(void);
 void Response(void);
 void SysInit(void);
-void ReadCO2();
-void ReadTempCmd();
-void ReadTemp();
+char ReadCO2();
+char ReadTempCmd();
+char ReadTemp();
 /***************************************************************END OF FILE****/

@@ -102,12 +102,17 @@ void Check_Key_State(void)
 
 void SysInit(void)
 {
-        RCC_Configuration();
-        GPIO_Config();
-        NVIC_Config();
-        USART_Configuration();
-        TIM_Config();  
-        WatchDog_Init(); 
+  RCC_Configuration();
+  GPIO_Config();
+  NVIC_Config();
+  USART_Configuration();
+  TIM_Config();  
+  WatchDog_Init(); 
+
+  if (SysTick_Config(SystemCoreClock / 1000))                   while (1);
+
+  printf ("\r\n[System                ] Power On");     
+  printf ("\r\n[System                ] System Init Done.\r\n");            
 }
 
 
