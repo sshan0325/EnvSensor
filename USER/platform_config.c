@@ -126,56 +126,6 @@ void GPIO_Config(void)
 void TIM_Config(void)
 {
   TIM_TimeBaseInitTypeDef         TIM_TimeBaseStructure;
-  TIM_OCInitTypeDef                   TIM_OCInitStructure;
-  
-   // Timer 3 Base configuration  _ BUZZER
-  TIM_TimeBaseStructure.TIM_Prescaler = 480; // 48000000 / 4800 =10000 Hz=  0.1ms
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-  TIM_TimeBaseStructure.TIM_Period = 100; 
-  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
-  TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
-
-  // Timer 2 : Channel 1, 2,3 and 4 Configuration in PWM mode 
-  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  
-  //TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
-  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
-  
-  //TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
-  TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
-  TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
- 
-  TIM_OCInitStructure.TIM_Pulse = 0;
-  TIM_OC1Init(TIM3, &TIM_OCInitStructure);
-  
-  // TIM2 counter enable 
-  TIM_Cmd(TIM3, ENABLE);
-
-  // TIM2 Main Output Enable 
-  TIM_CtrlPWMOutputs(TIM3, ENABLE);
-  
-   ////////////////////////////////// BUZZER //////////////////////////////
-   //48000000 / x = 254     x = 182 
-   //48000000 / 183 = 262295 
-   //따라서 Period 1000  -> 262.295 hz
-   //도 261hz  
-   //레 Prescaler      164
-   //미 Prescaler      145     
-   //파 Prescaler      138
-   //솔 Prescaler      122
-   //라 Prescaler      109
-   //시 Prescaler      97
-   //도 Prescaler      91
-   //레 Prescaler      82
-   //미 Prescaler      73    
-   //파 Prescaler      138
-   //솔 Prescaler      122
-   //라 Prescaler      109
-   //시 Prescaler      97
-   /////////////////////////////////// BUZZER //////////////////////////////
-
   
   /* Timer 14 Base configuration */
   TIM_TimeBaseStructure.TIM_Prescaler = 480;     // 48000000 / 480 =100000 Hz = 10us

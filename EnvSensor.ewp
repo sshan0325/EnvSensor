@@ -1970,22 +1970,16 @@
   <group>
     <name>USER</name>
     <file>
-      <name>$PROJ_DIR$\USER\passing.c</name>
+      <name>$PROJ_DIR$\USER\EnvSensor.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\USER\passing.h</name>
+      <name>$PROJ_DIR$\USER\EnvSensor.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\USER\platform_config.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\USER\platform_config.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\USER\RF_KEY.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\USER\RF_KEY.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\USER\stm32f0xx_conf.h</name>

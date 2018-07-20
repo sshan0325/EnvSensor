@@ -3,7 +3,6 @@
 #include "stdio.h"
 #include "usart.h"
 #include "subfunction.h"
-#include "RF_KEY.h"    
 
 /* Private variables ------------------------------------------------------*/
 #define CO2Addr                 (0x5A<<1) 

@@ -1,6 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include "RF_KEY.h"
 #include "stm32f0xx.h"
 #include "subfunction.h"
 #include "platform_config.h"
@@ -13,8 +12,6 @@ extern unsigned char  U2_Tx_Buffer[128];
 extern unsigned char  U1_Tx_Buffer[128];
 extern unsigned char  U2_Rx_Buffer[U2_RX_BUFFER_SIZE];  
 extern unsigned char  U1_Paket_Type;
-extern unsigned char  Reg_key_Value_Receive_Flag ;
-extern unsigned char  RF_DATA_RQST_Flag;
 extern unsigned char U2_Rx_DataPosition;
 
 void USART_Configuration(void)
@@ -83,7 +80,7 @@ void USART2_TX(void)            //현관 카메라 -> 월패드 전송 함수
            }
            #endif    
       }
-      RS485TX_DISABLE;
+      //RS485TX_DISABLE;
  }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,15 +108,5 @@ void USART1_TX(void)
              while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET); // wait for trans
         }
 
-        #ifdef U1_DATA_MONITOR
-        int tmp=0;
-        extern unsigned char    U1_Rx_DataPosition;
-        printf ("[CAM -> RF / Position : %d  -  ]",U1_Rx_DataPosition) ;      
-        for (tmp=0 ; tmp<17 ; tmp++)
-        {
-          printf ("%x  ",U1_Tx_Buffer[tmp]) ;
-        }
-        printf ("\r\n");
-        #endif  
 }
 //////////////////////////////////////////////////////////////////////////////////////////
