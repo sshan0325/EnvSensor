@@ -29,8 +29,8 @@ unsigned char U2_Rx_Compli_Flag = RESET;
 unsigned char U2_Rx_Buffer[U2_RX_BUFFER_SIZE] = {0};
 extern unsigned char U2_Tx_Buffer[128] ;
 
-/*************************** FLAG *********************************/
-unsigned int CNT = 0;
+/************************* Counter *******************************/
+unsigned int SENSINGCYCLE = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -96,9 +96,8 @@ void TIM14_IRQHandler(void) //10ms
 {
     if (TIM_GetITStatus(TIM14, TIM_IT_Update) != RESET)
     {
-        TIM_ClearITPendingBit(TIM14, TIM_IT_Update);
- 
-
+      TIM_ClearITPendingBit(TIM14, TIM_IT_Update);
+      SENSINGCYCLE ++;
     }
 }
 

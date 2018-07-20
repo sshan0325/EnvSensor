@@ -1,3 +1,6 @@
+#ifndef _ENVSENSOR_H
+#define _ENVSENSOR_H
+
 /* Includes ---------------------------------------------------------------*/
 #include "platform_config.h"
 #include "stdio.h"
@@ -17,3 +20,6 @@
 
 #define NOTREADY                2
 #define ERROR                   3
+
+
+#endif

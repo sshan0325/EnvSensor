@@ -6,13 +6,13 @@
 
 
 /* Private variables ---------------------------------------------------------*/
-USART_InitTypeDef                   USART_InitStructure;
+USART_InitTypeDef         USART_InitStructure;
 extern unsigned char  Tx_LENGTH;
 extern unsigned char  U2_Tx_Buffer[128];
 extern unsigned char  U1_Tx_Buffer[128];
 extern unsigned char  U2_Rx_Buffer[U2_RX_BUFFER_SIZE];  
 extern unsigned char  U1_Paket_Type;
-extern unsigned char U2_Rx_DataPosition;
+extern unsigned char  U2_Rx_DataPosition;
 
 void USART_Configuration(void)
 {
@@ -61,24 +61,13 @@ void USART_Configuration(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-/******************** 월패드 패킷에 대한 응답 패킷 송신  함수  *******************/
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void USART2_TX(void)            //현관 카메라 -> 월패드 전송 함수 
+
+void USART2_TX(void)            
 {
       for(unsigned char i = 0 ; i < Tx_LENGTH ; i++)
       {
            USART_SendData(USART2,U2_Tx_Buffer[i]);  
            while(USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET); // wait for trans
-           #ifdef Consol_LOG 
-           if (i==5 && Reg_key_Value_Receive_Flag != SET && RF_DATA_RQST_Flag != SET && U2_Tx_Buffer[i]!=0)
-           {
-              if ( (U2_Tx_Buffer[i]&0x80) == 0x80 )
-                printf ("\r\n[System                ] RF Communication Error\r\n");     
-              if ( (U2_Tx_Buffer[i]&0x01) == 0x01 )
-                printf ("\r\n[System                ] Command Tx to  WallPad(CallButton or Indicator)\r\n");     
-           }
-           #endif    
       }
       //RS485TX_DISABLE;
  }
