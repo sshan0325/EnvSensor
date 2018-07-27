@@ -9,7 +9,8 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-           
+
+
 /* Private function prototypes -----------------------------------------------*/
 void TIM_Config(void);
 void GPIO_Config(void);
@@ -20,9 +21,6 @@ void TimingDelay_Decrement(void);
 void WatchDog_Init(void);
 void WatchDog_Reset(void);
 void SysInit(void);
-char ReadCO2();
-char ReadTempCmd();
-char ReadTemp();
 /***************************************************************END OF FILE****/
 
 #endif 

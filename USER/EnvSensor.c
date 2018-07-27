@@ -1,6 +1,11 @@
 /* Includes ---------------------------------------------------------------*/
 #include "EnvSensor.h"
 
+/*************************** USART 1 ******************************/
+extern uint8_t aRxBuffer[BUFFERSIZE];
+extern unsigned char Rx_Compli_Flag;
+extern unsigned char Rx_SensorData_Count;
+
 char ReadTemp()
 {
   float         temp_val, Rhum_val;
@@ -154,6 +159,30 @@ char ReadCO2()
     printf ("\r\nCo2 Value : Not Ready");
   }
     
+  
+  return OK;
+}
+
+char ReadpParticle()
+{
+  int PM25Value, PM10Value;
+  
+  if(aRxBuffer[0]==0xAA && aRxBuffer[1]==0xAA         // 정상 데이터 여부 확인
+     && aRxBuffer[2]==0x53 && aRxBuffer[3]==0x52)
+  {
+      PM25Value = (aRxBuffer[12]*256) + aRxBuffer[13];              //PM2.5 센싱 데이터
+      PM10Value = (aRxBuffer[14]*256) + aRxBuffer[15];              //PM10 센싱 데이터
+  }
+  else
+  {
+  }
+  
+  Rx_Compli_Flag=RESET;
+  Rx_SensorData_Count=0;
+  
+  //printf ("\r\n%d %d %d %d %d %d %d %d",aRxBuffer[0],aRxBuffer[1],aRxBuffer[2],aRxBuffer[3],aRxBuffer[12],aRxBuffer[13],aRxBuffer[14],aRxBuffer[15]);
+  printf ("\r\nPM2.5 Value : %d",PM25Value);
+  printf ("\r\nPM10  Value : %d",PM10Value);
   
   return OK;
 }

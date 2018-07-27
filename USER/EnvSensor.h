@@ -21,5 +21,11 @@
 #define NOTREADY                2
 #define ERROR                   3
 
+#define SENSINGCYCLE            1              //sec
 
+/* Private function prototypes --------------------------------------------*/
+char ReadCO2();
+char ReadTempCmd();
+char ReadTemp();
+char ReadpParticle();
 #endif

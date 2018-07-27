@@ -4,9 +4,12 @@
 #include "usart.h"
 #include "platform_config.h"
 #include "subfunction.h"
+#include "EnvSensor.h"
+
 
 /* Private define ------------------------------------------------------------*/
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+
 
 PUTCHAR_PROTOTYPE
 {
@@ -16,11 +19,14 @@ PUTCHAR_PROTOTYPE
 }
 
 /* Private variables ---------------------------------------------------------*/
+/************************ ENV. SENSING ****************************/
+unsigned int EnvSensingFlag = RESET;
+
 /*************************** USART 1 ******************************/
-unsigned char U1_Rx_Count = 0;
-unsigned char U1_Rx_DataSavePosition = 0;
-unsigned char U1_Rx_DataPosition = 0;
-unsigned char U1_Rx_Buffer[U1_RX_BUFFER_SIZE] = {0};
+uint8_t aRxBuffer[BUFFERSIZE];
+unsigned char Rx_Compli_Flag = RESET;
+unsigned char Rx_SensorData_Count = 0 ;
+
 /*************************** USART 2 ******************************/
 unsigned char U2_Rx_Count = 0 ;
 unsigned char U2_Rx_DataSavePosition = 0;
@@ -30,7 +36,7 @@ unsigned char U2_Rx_Buffer[U2_RX_BUFFER_SIZE] = {0};
 extern unsigned char U2_Tx_Buffer[128] ;
 
 /************************* Counter *******************************/
-unsigned int SENSINGCYCLE = 0;
+unsigned int SENSINGCOUNT = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -97,7 +103,12 @@ void TIM14_IRQHandler(void) //10ms
     if (TIM_GetITStatus(TIM14, TIM_IT_Update) != RESET)
     {
       TIM_ClearITPendingBit(TIM14, TIM_IT_Update);
-      SENSINGCYCLE ++;
+      SENSINGCOUNT ++;
+      
+      if (SENSINGCOUNT>SENSINGCYCLE*100)
+      {
+        EnvSensingFlag=SET;
+      }
     }
 }
 
@@ -128,26 +139,19 @@ void USART2_IRQHandler(void)
 
 void USART1_IRQHandler(void)     
 {
-    if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-    {    
-            U1_Rx_Buffer[U1_Rx_DataSavePosition] = USART_ReceiveData(USART1);  
-            U1_Rx_Count++;
-            U1_Rx_DataSavePosition++;
-            if (U1_Rx_DataSavePosition-U1_Rx_DataPosition > U1_Rx_Count)
-            {
-                U1_Rx_DataSavePosition=0;
-                U1_Rx_DataPosition=0;
-                U1_Rx_Count=0;
-                #ifdef Consol_LOG   
-                printf ("\r\n[System                ] U1 Beffer Error");     
-                #endif
-            }            
-    }
-
-    if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
+  if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+  {    
+    aRxBuffer[Rx_SensorData_Count] = USART_ReceiveData(USART1);	
+    Rx_SensorData_Count++; 
+    if (Rx_SensorData_Count>=18)
     {
+      Rx_Compli_Flag = SET ; 
+    }      
+  }
 
-    }
+  if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
+  {
+  }
 }
 
 
